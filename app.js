@@ -1,4 +1,11 @@
 const express = require('express');
+const routes = require('./utils/routes');
+const app = express();
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use('/api/',routes); 
+/*
 const mysql = require('mysql');
 
 // Create connection
@@ -6,7 +13,7 @@ const db = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : '',
-    database : 'nodemysql1'
+    database : 'car_rental'
 });
 
 // Connect
@@ -17,7 +24,7 @@ db.connect((err) => {
     console.log('MySql Connected...');
 });
 
-const app = express();
+
 
 // Create DB
 app.get('/createdb', (req, res) => {
@@ -102,8 +109,9 @@ app.get('/deletepost/:id', (req, res) => {
         res.send('Post deleted...');
     });
 });
+*/
 
 
-app.listen('3000', () => {
-    console.log('Server started on port 3000');
+app.listen('3001', () => {
+    console.log('Server started on port 3001');
 });
