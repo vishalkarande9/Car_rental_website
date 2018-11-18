@@ -1,12 +1,13 @@
 const mysql = require('mysql');
 const _ = require('lodash');
+var moment = require('moment');
 
 // Create connection
 const db = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : '',
-    database : 'homework2'
+    database : 'car_rental'
 });
 
 // Connect
@@ -23,17 +24,39 @@ db.connect((err) => {
 }
 */
 
-function get(req, res) {
-    let username = req.body.username;
+function get(req, res) { 
+    let license_no = req.body.license_no;
 
-    let sql = `SELECT * FROM Customer WHERE name = ${username}`;
+    let sql = `SELECT R.rlid,R.street,SC.city,SC.state FROM rental_store R INNER JOIN state_city SC ON R.zip = SC.zip`;
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
         } else{
-            console.log(result);
+           // console.log(result);
+            let sql2 = `SELECT type_name from type_info`;
+            let query2 = db.query(sql2, (err, result2) => {
+                if(err){
+                    console.log(err);
+                } else{
+                    let storeArr=[];
+                    let obj={}
+                    for(let i=0;i<result.length;i++){
+                       storeArr.push({
+                           street:result[i].street+","+result[i].city+","+result[i].state,
+                           rlid:result[i].rlid
+                        }) 
+                    }
+                    obj={
+                        store:storeArr,
+                        cartype:result2
+                    }
+
+                    res.json(obj);
+                }
+            })
+
            // res.send(result);
-           res.json(result);
+         //  res.json(result);
         }
         
     });  
@@ -41,25 +64,33 @@ function get(req, res) {
 
 function check(req, res) {
     
-    let License = req.body.License;
-    let StartDate = req.body.StartDate;
-    let ReturnDate = req.body.ReturnDate;
-    
-
-    console.log("request :",req.body);
-    let sql = `SELECT * FROM Reservation`;
+    let license_no = req.body.license_no;
+    let StartDate = req.body.pickup_date;
+    let ReturnDate = req.body.return_date;
+    let rlid = req.body.rlid;
+   // let epoc = moment(StartDate).valueOf()
+    let StartDatetimeStamp = moment(StartDate, "M/D/YYYY").valueOf();
+    StartDate = moment(StartDatetimeStamp);
+    let actualStartDateFormat = StartDate.format("M/D/YYYY");
+    let ReturnDatetimeStamp = moment(ReturnDate, "M/D/YYYY").valueOf();
+     ReturnDate = moment(ReturnDatetimeStamp);
+    let actualReturnDateFormat = ReturnDate.format("M/D/YYYY");
+  
+    let sql = `SELECT * FROM Reservation Where status=1`;
     
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
         } else{
-         //   console.log(result);
-
-            if(_.some(result, { 'License':License})){
-              let array = _.filter(result, { 'License':License});
+           //console.log(result);
+            
+            if(_.some(result, { 'license_no':license_no})){
+              let array = _.filter(result, { 'license_no':license_no});
               let flag=true;
               for(let i=0;i<array.length;i++){
-                  if((array[i]["StartDate"]<=StartDate && array[i]["ReturnDate"]>=StartDate) || (array[i]["StartDate"]<=ReturnDate && array[i]["ReturnDate"]>=ReturnDate)){
+                  let pickup_date=moment(array[i]["pickup_date"], "M/D/YYYY").valueOf();
+                  let return_date=moment(array[i]["return_date"], "M/D/YYYY").valueOf();
+                  if((pickup_date<=StartDate && return_date>=StartDate) || (pickup_date<=ReturnDate && return_date>=ReturnDate) || (pickup_date>=StartDate && return_date<=ReturnDate)){
                       flag = false;
                   } 
               } 
@@ -67,7 +98,7 @@ function check(req, res) {
                   let obj = {code:200,message:"go to next page"};
                   res.json(obj);
               } else{
-                let obj = {code:400,message:"no action"};
+                let obj = {code:400,message:"date already present in reservation table so no action"};
                 res.json(obj);
               }            
             } else{
@@ -78,25 +109,62 @@ function check(req, res) {
 
         }
  
-    }); 
+    });
+    
 }
 
 function search(req, res){
-   // let StartDate = req.body.StartDate;
-   // let ReturnDate = req.body.ReturnDate;
+    let license_no = req.body.license_no;
+    let StartDate = req.body.pickup_date;
+    let ReturnDate = req.body.return_date;
+    let rlid = req.body.rlid;
+   // let epoc = moment(StartDate).valueOf()
+    let StartDatetimeStamp = moment(StartDate, "M/D/YYYY").valueOf();
+    StartDate = moment(StartDatetimeStamp);
+    let actualStartDateFormat = StartDate.format("M/D/YYYY");
+    let ReturnDatetimeStamp = moment(ReturnDate, "M/D/YYYY").valueOf();
+     ReturnDate = moment(ReturnDatetimeStamp);
+    let actualReturnDateFormat = ReturnDate.format("M/D/YYYY");
+
     let carNotToInclude = ["CS-101"];
      
-    let sql1 = `SELECT * FROM Reservation`;
-    /*
+    let sql1 = `SELECT * FROM Reservation where vin IN (select vin from availability where rlid=${rlid}) AND status=1`;
+    
     let query = db.query(sql1, (err, result) => {
+        if(err){
+          console.log(err); 
+        } else{
+            let flag=true;
+            let vinIdArray=[];
+            for(let i=0;i<result.length;i++){
+                let pickup_date=moment(result[i]["pickup_date"], "M/D/YYYY").valueOf();
+                let return_date=moment(result[i]["return_date"], "M/D/YYYY").valueOf();
+                if((pickup_date<=StartDate && return_date>=StartDate) || (pickup_date<=ReturnDate && return_date>=ReturnDate) || (pickup_date>=StartDate && return_date<=ReturnDate)){
+                    flag=false;
+                } else{
+                    vinIdArray.push(result[i].vin);
+                }
+            }
+            if(vinIdArray.length>0){
+                res.json({code:200,message:"cars found",data:vinIdArray})  
+
+            } else{
+                res.json({code:400,message:"no cars found"})
+            }
+
+        //  res.json(result);
+        }
+        /*
         for(let i=0;i<result.length;i++){
             if((result[i]["StartDate"]<=StartDate && result[i]["ReturnDate"]>=StartDate) || (result[i]["StartDate"]<=ReturnDate && result[i]["ReturnDate"]>=ReturnDate)){
                 carNotToInclude.push(result[i]["VIN"])
             }
         }
+        */
     })
-    */
+    
    
+    /*
     let sql2 =  `SELECT * FROM student inner join takes On student.ID=takes.ID`;
     let query = db.query(sql2, (err, result) => {
         if(err){
@@ -109,6 +177,7 @@ function search(req, res){
         }
         
     })
+   */ 
 
 }
 

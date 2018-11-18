@@ -1,5 +1,7 @@
 const express = require("express");
-const form=require("./../api/form.js")
+const form=require("./../api/form.js");
+const login=require("./../api/login.js");
+
 const router = express.Router();
 
 //router.post('/formget',question.add)
@@ -9,7 +11,8 @@ const router = express.Router();
 router.post('/formget',form.get)
 router.post('/formCheck',form.check)
 router.post('/search',form.search)
+router.post('/login',login.auth)
 
-module.exports = router;
+module.exports = router; 
 
 
