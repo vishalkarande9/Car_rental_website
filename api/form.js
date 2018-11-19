@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const _ = require('lodash');
+const async = require('async');
 var moment = require('moment');
 
 // Create connection
@@ -146,7 +147,26 @@ function search(req, res){
                 }
             }
             if(vinIdArray.length>0){
-                res.json({code:200,message:"cars found",data:vinIdArray})  
+                let tableArray=[];
+                async.each(vinIdArray, function(item, callback) {
+                    let sql2 = `SELECT C.model, I.type_name, T.rate_per_day, T.capacity From Car C, is_of I, type_info T Where C.vin='${item}' AND C.model=I.model AND I.type_name=T.type_name`;
+                    let query =db.query(sql2,(err,result2) => {
+                        if(err){
+                            console.log(err);
+                            callback();
+                        } else{
+                            console.log(result2[0],"%%%%%%%%%%%%%%%%%%");
+                            tableArray.push(result2[0]);
+                            callback();
+                          
+                        }
+
+                    })
+                }, function(err) {
+                    res.json({code:200,message:"cars found",data:tableArray})
+                })
+            
+  
 
             } else{
                 res.json({code:400,message:"no cars found"})
@@ -154,32 +174,14 @@ function search(req, res){
 
         //  res.json(result);
         }
-        /*
-        for(let i=0;i<result.length;i++){
-            if((result[i]["StartDate"]<=StartDate && result[i]["ReturnDate"]>=StartDate) || (result[i]["StartDate"]<=ReturnDate && result[i]["ReturnDate"]>=ReturnDate)){
-                carNotToInclude.push(result[i]["VIN"])
-            }
-        }
-        */
+ 
     })
     
-   
-    /*
-    let sql2 =  `SELECT * FROM student inner join takes On student.ID=takes.ID`;
-    let query = db.query(sql2, (err, result) => {
-        if(err){
-            console.log(err);
-        } else{
-           let newArr= _.filter(result, (v) => !_.includes(carNotToInclude, v.course_id));
-        
-          // console.log(newArr);
-           res.json(result.length);
-        }
-        
-    })
-   */ 
+
 
 }
+
+
 
 module.exports.search = search 
 module.exports.get = get 
