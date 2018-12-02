@@ -19,7 +19,7 @@ router.post('/register/manager',register.registerManager)
 
 
 router.post('/manager/addcar',manager.addCar)
-router.get('/manager/getrlid',manager.getrlid)
+router.post('/manager/getrlid',manager.getrlid)
 router.post('/manager/deletecar',manager.deleteCar)
 router.get('/manager/getcar',manager.getCar)
 

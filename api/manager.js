@@ -69,16 +69,38 @@ function getrlid(req, res) {
             console.log(err);
         } else{
         let rlid = result[0].rlid;
-        let obj={
-            "code":200,
-            "message":"got rlid",
-            "data":{
-                "rlid":rlid
-            }
+        let sql2 = `SELECT model FROM model `;
+        let query = db.query(sql2, (err, result2) => {
+            if(err){
+                console.log(err);
+            } else{
+                let sql3 = `SELECT type_name FROM type_info `;
+                let query = db.query(sql3, (err, result3) => {
+                    if(err){
+                        console.log(err);
+                        let obj={
+                            "code":400,
+                            "message":"error in getting rlid, modelArr, type_nameArr"
+                        } 
+                        res.json(obj);
+                    } else{
+                        let obj={
+                            "code":200,
+                            "message":"got rlid , model, type_name",
+                            "data":{
+                                "rlid":rlid,
+                                "modelArr":result2,
+                                "type_nameArr":result3
+                            }
+                
+                        } 
+                        res.json(obj);
+                    }
+                })
 
-        } 
-        res.json(obj);
-    
+            }
+        })
+     
         }
         
     });  
@@ -91,21 +113,25 @@ function addCar(req, res) {
     let year = req.body.year;
     let rlid = req.body.rlid;
   
-    let sql = `Insert into car values (${vin},${model},${year})`;
+    let sql = `Insert into car values ('${vin}','${model}',${year})`;
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
         } else{
      
-           let sql1 = `Insert into availability values (${vin},${rlid})`;
+           let sql1 = `Insert into availability values ('${vin}',${rlid})`;
            let query = db.query(sql1, (err, result) => {
             if(err){
                 console.log(err);
+                let obj={
+                    "code":400,
+                    "message":"Cannot add new car "
+                } 
+                res.json(obj);
             } else{
                 let obj={
                     "code":200,
-                    "message":"new car inserted",
-                    "vin":vin
+                    "message":"new car inserted"
                 } 
                 res.json(obj);
             }
