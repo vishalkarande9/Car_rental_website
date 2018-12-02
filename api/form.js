@@ -2,13 +2,15 @@ const mysql = require('mysql');
 const _ = require('lodash');
 const async = require('async');
 var moment = require('moment');
+const uuid = require('uuid/v1');
+
 
 // Create connection
 const db = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : '',
-    database : 'car_rental'
+    database : 'dbms_project'
 });
 
 // Connect
@@ -20,44 +22,75 @@ db.connect((err) => {
 });
 
 
-/* get : obj:{
-          username:vishal 
-}
-*/
+
 
 function get(req, res) { 
-    let license_no = req.body.license_no;
-
+    let emailId = req.body.emailId;
+    console.log(emailId);
     let sql = `SELECT R.rlid,R.street,SC.city,SC.state FROM rental_store R INNER JOIN state_city SC ON R.zip = SC.zip`;
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
         } else{
-           // console.log(result);
             let sql2 = `SELECT type_name from type_info`;
             let query2 = db.query(sql2, (err, result2) => {
                 if(err){
                     console.log(err);
+                    obj={
+                        'code':400,
+                        'message':"error in getting cartype and store"
+                    }
+
+                    res.json(obj);
                 } else{
                     let storeArr=[];
-                    let obj={}
+                    let obj={};
+                    /*
                     for(let i=0;i<result.length;i++){
                        storeArr.push({
                            street:result[i].street+","+result[i].city+","+result[i].state,
                            rlid:result[i].rlid
                         }) 
                     }
-                    obj={
-                        store:storeArr,
-                        cartype:result2
-                    }
+                    */
+             
 
-                    res.json(obj);
+                    async.each(result, function(item, callback) {
+                        storeArr.push({
+                            street:item.street+","+item.city+","+item.state,
+                            rlid:item.rlid
+                         });
+                         callback() 
+
+                    }, function(){
+                        let sql3 = `SELECT license_no from customer WHERE emailId='${emailId}'`;
+                        let query2 = db.query(sql3, (err, result3) => {
+                            if(err){
+                                console.log(err);
+                                obj={
+                                    'code':400,
+                                    'message':"error in getting cartype and store and license_no"
+                                }
+            
+                                res.json(obj);
+                            } else{
+                                
+                                obj={
+                                    'code':200,
+                                    'message':"all store and models",
+                                    'store':storeArr,
+                                    'cartype':result2,
+                                    'license_no':result3[0].license_no
+                                }
+            
+                                res.json(obj);
+                            }
+                        })
+
+                    })
                 }
             })
 
-           // res.send(result);
-         //  res.json(result);
         }
         
     });  
@@ -66,10 +99,9 @@ function get(req, res) {
 function check(req, res) {
     
     let license_no = req.body.license_no;
-    let StartDate = req.body.pickup_date;
-    let ReturnDate = req.body.return_date;
+    let StartDate = req.body.pickupdate;
+    let ReturnDate = req.body.returndate;
     let rlid = req.body.rlid;
-   // let epoc = moment(StartDate).valueOf()
     let StartDatetimeStamp = moment(StartDate, "M/D/YYYY").valueOf();
     StartDate = moment(StartDatetimeStamp);
     let actualStartDateFormat = StartDate.format("M/D/YYYY");
@@ -80,6 +112,7 @@ function check(req, res) {
     let sql = `SELECT * FROM Reservation Where status=1`;
     
     let query = db.query(sql, (err, result) => {
+        let emailId = req.body.emailId;
         if(err){
             console.log(err);
         } else{
@@ -116,9 +149,10 @@ function check(req, res) {
 
 function search(req, res){
     let license_no = req.body.license_no;
-    let StartDate = req.body.pickup_date;
-    let ReturnDate = req.body.return_date;
+    let StartDate = req.body.pickupdate;
+    let ReturnDate = req.body.returndate;
     let rlid = req.body.rlid;
+    let type_name = req.body.type_name;
    // let epoc = moment(StartDate).valueOf()
     let StartDatetimeStamp = moment(StartDate, "M/D/YYYY").valueOf();
     StartDate = moment(StartDatetimeStamp);
@@ -141,48 +175,95 @@ function search(req, res){
                 let pickup_date=moment(result[i]["pickup_date"], "M/D/YYYY").valueOf();
                 let return_date=moment(result[i]["return_date"], "M/D/YYYY").valueOf();
                 if((pickup_date<=StartDate && return_date>=StartDate) || (pickup_date<=ReturnDate && return_date>=ReturnDate) || (pickup_date>=StartDate && return_date<=ReturnDate)){
-                    flag=false;
-                } else{
                     vinIdArray.push(result[i].vin);
+                } else{
+                    flag=false;
                 }
             }
-            if(vinIdArray.length>0){
-                let tableArray=[];
-                async.each(vinIdArray, function(item, callback) {
-                    let sql2 = `SELECT C.model, I.type_name, T.rate_per_day, T.capacity From Car C, is_of I, type_info T Where C.vin='${item}' AND C.model=I.model AND I.type_name=T.type_name`;
-                    let query =db.query(sql2,(err,result2) => {
-                        if(err){
-                            console.log(err);
-                            callback();
-                        } else{
-                            console.log(result2[0],"%%%%%%%%%%%%%%%%%%");
-                            tableArray.push(result2[0]);
-                            callback();
-                          
-                        }
 
-                    })
-                }, function(err) {
-                    res.json({code:200,message:"cars found",data:tableArray})
-                })
-            
-  
+            let sql2 = `SELECT A.vin FROM availability A, car C, model M where rlid=${rlid} AND A.vin = C.vin AND C.model = M.model AND M.type_name='${type_name}'`;
+            let query = db.query(sql2, (err,result2) => {
+                if(err){
+                    console.log(err);
+                } else{
+                    let AllvinArr=[];
+                    for(let i=0;i<result2.length;i++){
+                        AllvinArr.push(result2[i].vin);
+                    }
+                    vinIdArray =  _.difference(AllvinArr, vinIdArray); 
+                    if(vinIdArray.length>0){
+                        let tableArray=[];
+                        async.each(vinIdArray, function(item, callback) {
+                            let sql2 = `SELECT C.vin, C.model, I.type_name, T.rate_per_day, T.capacity From Car C, model I, type_info T Where C.vin='${item}' AND C.model=I.model AND I.type_name=T.type_name`;
+                            let query =db.query(sql2,(err,result3) => {
+                                if(err){
+                                    console.log(err);
+                                    callback();
+                                } else{
+                                 //   console.log(result3[0],"%%%%%%%%%%%%%%%%%%");
+                                    tableArray.push(result3[0]);
+                                    callback();
+                                  
+                                }
+        
+                            })
+                        }, function(err) {
 
-            } else{
-                res.json({code:400,message:"no cars found"})
-            }
+                                 let stdate = req.body.pickupdate;
+                                 let rtdate = req.body.returndate;
+                                 let start = moment(stdate, "M/D/YYYY");
+                                 let end = moment(rtdate, "M/D/YYYY");
 
-        //  res.json(result);
+                                //Difference in number of days
+                                let days = moment.duration(end.diff(start)).asDays();
+                                res.json({code:200,message:"cars found",data:tableArray,days:days})
+                        })
+                    
+          
+        
+                    } else{
+                        res.json({code:400,message:"no cars found"})
+                    }
+                }
+
+            })
+
+
         }
  
     })
     
+}
 
+function book(req, res) { 
+    let vin =req.body.vin;
+    let license_no =req.body.license_no;
+    let pickupdate =req.body.pickupdate;
+    let returndate =req.body.returndate;
+    let resid = moment().unix();
+    let sql1 = `Insert into reservation values (${resid},'${vin}',${license_no},'${pickupdate}','${returndate}',1)`;
+    let query2 = db.query(sql1, (err, result) => {
+        if(err){
+            obj={
+                'code':400,
+                'message':"cannot insert values"
+            }
+
+            res.json(obj);
+        } else{
+            obj={
+                'code':200,
+                'message':"booking done"
+            }
+
+            res.json(obj);
+        }
+    })
 
 }
 
 
-
+module.exports.book = book 
 module.exports.search = search 
 module.exports.get = get 
 module.exports.check = check 

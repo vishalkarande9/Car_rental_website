@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.1",
+    "cors": "^2.8.5",
     "excel-to-json": "^1.0.0",
     "express": "^4.15.3",
     "fs": "0.0.1-security",
@@ -17,6 +18,7 @@
     "moment": "^2.22.2",
     "mysql": "^2.13.0",
     "node-excel-to-json": "0.0.3",
+    "uuid": "^3.3.2",
     "xlsx-to-json-lc": "^0.5.0"
   }
 }

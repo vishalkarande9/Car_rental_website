@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CAR-RENTAL</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Corben:bold" rel="stylesheet" type="text/css">
+ <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
+   
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+  <nav class="navbar navbar-light navbar-static-top" style="background-color: #8DA77C" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+               <!-- <a class="navbar-brand" href="index.html">CarRental</a>-->
+               <div>
+            
+                <h4><b>CAR RENTAL</b></h4>
+            </div>
+            </div>
+            <!-- /.navbar-header -->
+
+            <!-- /.navbar-top-links -->
+
+    
+            <!-- /.navbar-static-side -->
+        </nav>
+
+
+    <div class="page-wrapper">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div style="background-color: #8DA77C" class="panel-heading">
+                        <h3 class="panel-title">Customer Registeration</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" name="register"  id="register-form" method="post" action="rentcar.html" >
+                            <fieldset>
+                                 
+             
+                <div class="form-group">
+                  <div class="form-label-group">
+                     <label for="firstName">Name</label>
+                    <input type="text" id="Name" name="Name" class="form-control" required="required" autofocus="autofocus"   data-error="Please enter your name" required>
+                    
+                  </div>
+                </div>
+              
+                <div class="form-group">
+                  <div class="form-label-group">
+                     <label for="Age">Age</label>
+                    <input type="number" id="age" name="age" class="form-control" placeholder="Age" min=25 required="required" autofocus="autofocus" required>
+                    
+                  </div>
+                 <div class="form-group">
+                    <div class="form-label-group">
+                    <label for="inputAddress2">Street</label>
+                    <input type="text" class="form-control" id="street" name="street" placeholder="Apartment, studio, or floor"  data-error="Please enter  your street name"  required>
+                  </div>
+              </div>
+                   <div class="form-group ">
+                    <div class="form-label-group">
+                      <label for="inputCity">City</label>
+                      <select id="inputCity" class="form-control" required>
+                        <option selected>Choose...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                </div>
+                  
+                    
+                    <div class="form-group ">
+                        <div class="form-label-group">
+                      <label for="inputState">State</label>
+                      <select id="inputState" class="form-control" required>
+                        <option selected>Choose...</option>
+                        <option>...</option>
+                      </select>
+                    </div>
+                </div>
+                    <div class="form-group ">
+                        <div class="form-label-group">
+                      <label for="inputZip">Zip</label>
+                      <input type="text" id="zipcode" name="zipcode" class="form-control" minlength="5"  required>
+                    </div>
+                </div>
+                 
+               <div class="form-group ">
+                        <div class="form-label-group">
+                      <label for="inputZip">License</label>
+                      <input type="text" id="license" name="license" class="form-control" minlength="8" maxlength="8" required>
+                    </div>
+                </div>
+
+            
+                  <div class="form-group">
+                    <div class="form-label-group">
+                        <label for="inputEmail">Email</label>
+                        <input type="email"  name="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" data-error="email address is invalid" required="required">
+
+                
+                    </div>
+                </div>
+
+              
+              <div class="form-group">
+                <div class="form-label-group">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" id="inputPassword" name="inputPassword" class="form-control" data-minlength="6" placeholder="Password" required="required" minlength="6" data-bv-identical="true"
+                data-bv-identical-field="confirmPassword"
+                data-bv-identical-message="The password and its confirm are not the same"/>
+                <div class="help-block">Minimum of 6 characters</div>
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="form-label-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword"  name="confirmPassword" class="form-control" placeholder="Confirm password" data-match="inputPassword" minlength="6"  required="required">
+                     <div class="help-block with-errors"></div>
+                
+                </div>
+            </div>
+
+
+                                
+                                <!-- Change this to a button or input when using this as a form -->
+                                <div class="text-center">
+                                 <button style="background-color: #8DA77C"  id="test"class="btn btn-primary text-center" type="submit">Register</button>
+                                 <div class="text-center">
+                            </fieldset>
+                        </form>
+                           <div class="text-center">
+            <a class="d-block small mt-3" href="index.html">Login Page</a>
+            <!--<a class="d-block small" href="forgot-password.html">Forgot Password?</a>-->
+          </div>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+ var password = document.getElementById("inputPassword")
+  , confirm_password = document.getElementById("confirmPassword");
+
+function validatePassword(){
+   
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+
+
+
+
+  
+    
+
+        var zip=document.getElementById("zipcode");
+        var newText = '';
+        var  numbers = '0123456789';
+
+function validateZip() {
+
+    
+        for (var i=0; i < zip.value.length; i++) {
+            if(numbers.indexOf(zip.value[i]) > -1 ) {
+                zip.setCustomValidity('');
+                newText = newText + zip.value[i];
+            }
+            else {
+                zip.setCustomValidity('invalid zipcode');
+            }
+        }
+    }
+zip.onchange=validateZip;
+
+
+</script>
+
+        
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../vendor/raphael/raphael.min.js"></script>
+    <script src="../vendor/morrisjs/morris.min.js"></script>
+    <script src="../data/morris-data.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+   <!--  <script type="text/javascript" src="js/jquery.validate.min.js"></script>-->
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link rel='stylesheet' type = "text/css" href="style.css" />
+<title>Writer's Paradise</title>
+<script>
+function submitblog() {
+	let blogtitle = document.getElementById("blogtitle").value;
+	let blog = document.getElementById("blog").value;
+	var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", 'write', true);
+    xhttp.setRequestHeader('Content-Type','application/json');
+	xhttp.onreadystatechange = function() {
+    	if(this.readyState == 4 && this.status == 200) {
+    		let response = xhttp.responseText; 
+    		response = JSON.parse(response);
+    		if(response.code == 200) {
+    			alert('Post created successfully');
+    			location.href="index.html"
+    		} else {
+    			alert('Error in creating post');
+    		}
+    	}
+	}
+
+    if(blogtitle.trim().length == 0) {
+    	alert('Please enter blog title');
+    } else if(blog.trim().length == 0) {
+    	alert('Please enter your post')
+    } else {
+		xhttp.send(blogtitle + "&&&" +blog);
+    }
+}
+</script>
+</head>
+<body>
+<div class="header">
+  <h2>Writer's Paradise</h2>
+</div>
+
+<div class="topnav">
+  <a href="index.html">List</a>
+  <a href="#" style="background-color:red;">Write</a>
+</div>
+
+<div class="row" style="height:100%">
+  <div class="leftcolumn">
+    <div class="card">
+      <h2>Write a blog</h2>
+      <hr>
+      <h5>Blog title</h5>
+      <input type = "text" id = 'blogtitle'></input>
+      <h5>Blog</h5>
+      <textarea id = 'blog' rows="30"></textarea>
+      <br />
+      <button type="submit" onclick="submitblog()">Create</button>
+    </div>    
+  </div>
+</div>
+</body>
+</html>

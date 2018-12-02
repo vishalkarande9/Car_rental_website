@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+<link rel='stylesheet' type = "text/css" href="style.css" />
+<title>Writer's Paradise</title>
+<script> 
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", 'list', true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.onreadystatechange = function() {
+    	if(this.readyState == 4 && this.status == 200) {
+    		let response = xhttp.responseText;
+    		let parsed = JSON.parse(response);
+    		for(var i in parsed) {				
+				let cardDiv = document.createElement("div");
+				cardDiv.className = "card";
+				
+				let title = document.createElement("h2");
+				let titleData = document.createTextNode(parsed[i].title);
+				title.appendChild(titleData);
+				cardDiv.appendChild(title);
+				
+				let date = document.createElement("h5");
+				let dateData = document.createTextNode("Published on " + parsed[i].date);
+				date.appendChild(dateData);
+				cardDiv.appendChild(date);
+				
+				let blog = document.createElement("p");
+				let blogData = document.createTextNode(parsed[i].data);
+				blog.appendChild(blogData);
+				cardDiv.appendChild(blog);
+				
+				let mainDiv = document.getElementById("blogdata");
+				mainDiv.appendChild(cardDiv);
+			}
+    	}
+		}
+		
+		
+	xhttp.send();
+       
+  });
+
+</script>
+</head>
+<body>
+<div class="header">
+  <h2>Writer's Paradise</h2>
+</div>
+
+<div class="topnav">
+<a href="#" style="background-color:red;" disabled>List</a>
+  <a href="writeblog.html">Write</a>  
+</div>
+
+<div class="row">
+  <div class="blogdata" id="blogdata">
+     
+  </div>
+</div>
+</body>
+</html>

@@ -5,14 +5,14 @@ const _ = require('lodash');
 const db = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
-    database : 'car_rental'
+    password : '', 
+    database : 'dbms_project'
 });
 
 // Connect
 db.connect((err) => {
     if(err){
-        throw err;
+        throw err; 
     }
     console.log('MySql Connected... $$$$$$$$$$$$$$$$$$$$$$$');
 });
@@ -20,16 +20,18 @@ db.connect((err) => {
 
 
 function auth(req, res) { 
-    let licenseNo = req.body.license_no;
-    console.log("I am here $$$$$$$$$$$$$$$$$$$$$$$$");
-   // let password = req.body.password;
+   let emailId = req.body.emailId;
+   let password = req.body.password;
+   let usertype = req.body.usertype;
 
-    let sql = `SELECT license_no FROM Customer Where license_no =${licenseNo}`;
+
+    let sql = `SELECT emailId FROM user Where emailId ='${emailId}' AND password ='${password}' AND user_key =${usertype}`;
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
         } else{
             if(result.length>0){
+
               let obj={
                   "code":200,
                   "message":"valid user"
@@ -39,15 +41,10 @@ function auth(req, res) {
             } else{
                 let obj={
                     "code":400,
-                    "message":"Invalid user"
+                    "message":"Invalid user, Please register"
                 } 
                 res.json(obj);
-            }
-
-
-
-           // res.send(result);
-    
+            }    
         }
         
     });  

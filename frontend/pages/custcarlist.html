@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="../vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Corben:bold" rel="stylesheet" type="text/css">
+ <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
+
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+
+<style type="text/css">
+table#carlist {
+    border-collapse: collapse;   
+}
+#carlist tr {
+    background-color: #eee;
+    border-top: 1px solid #fff;
+}
+#carlist tr:hover {
+    background-color: #ccc;
+}
+#carlist th {
+    background-color: #fff;
+}
+#carlist th, #example td {
+    padding: 3px 5px;
+}
+#carlist td:hover {
+    cursor: pointer;
+}
+
+#mytable,td{
+    border:1px solid blue;
+}
+
+
+
+
+
+.selected {
+    background-color: brown;
+    color: #8DA77C;
+}
+
+
+</style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <!-- Navigation -->
+        <nav  style="background-color: #8DA77C" class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+               <!-- <a class="navbar-brand" href="index.html">CarRental</a>-->
+               <h3> <b>CAR RENTAL</b></h3>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                
+              
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        
+                        <li class="divider"></li>
+                        <li><a href="index.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                       
+                       
+                        
+                        <li>
+                            <a href="editbooking.html"><i class="fa fa-sitemap fa-fw"></i> Edit Reservation</a>
+                            
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-sitemap fa-fw"></i>Contact</a>
+                            
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                           
+                          
+                       
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Choose A Car</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div  style="background-color: #8DA77C" class="panel-heading">
+                            <h4>Vehicle details</h4>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div id="cardetails" class="panel-body">
+                            <table width="100%"  id="carlist" class="table table-striped table-bordered" >
+
+                            <tr>
+                                    <th>Vin</th>
+                                    <th>CarModel</th>
+                                    <th>Capacity</th>
+                                    <th>Price perday</th>
+                                    
+                                    <th>Select</th>
+                                </tr>
+
+
+                            </table>
+
+                 
+                           
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            
+        
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="../vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="../vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+//car listing
+$(document).ready(function() 
+{
+
+// disable back button code
+/*
+        window.history.pushState(null, "", window.location.href);        
+        window.onpopstate = function() {
+        window.history.pushState(null, "", window.location.href);
+        };
+*/        
+
+let car = JSON.parse(localStorage.getItem('searchRes'));
+
+  $.each(car, function(key, val) {
+    var tr = '<tr>';
+  
+    tr += '<td>' + val.vin + '</td>';
+    tr += '<td>' + val.model + '</td>';
+    tr += '<td>' + val.capacity + '</td>';
+    tr += '<td>' + val.rate_per_day + '</td>';
+    
+    tr += '<td><button class="select" data-key="'+ (key + 1) +'">select</button></td>';
+  
+    tr += '</tr>';
+  
+    $('#carlist').append(tr);
+  });
+
+
+$('button.select').on('click', function() {
+    var cRow = $(this).parents('tr');
+    var vin = $('td:nth-child(1)', cRow).text();
+    var model = $('td:nth-child(2)', cRow).text();
+    var capacity = $('td:nth-child(3)', cRow).text();
+     var baseprice = $('td:nth-child(4)', cRow).text();
+      
+    
+      doSelect(vin, model, capacity,baseprice);
+  });  
+  
+  
+  function doSelect(param1, param2, param3, param4 ) {
+    localStorage.setItem('vin',param1);  
+    localStorage.setItem('Carmodel',param2);
+    localStorage.setItem('price',param4);
+    window.location.href = "./reserved.html"; 
+  }
+
+
+
+
+    });
+    </script>
+
+    
+
+
+</body>
+
+</html>

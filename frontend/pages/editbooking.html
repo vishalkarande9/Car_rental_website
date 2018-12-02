@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+     
+     <link href="../dist/css/daterangepicker.css" rel="stylesheet" />
+    <link href="../dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+     <link href="http://fonts.googleapis.com/css?family=Corben:bold" rel="stylesheet" type="text/css">
+ <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <style type="text/css">
+
+    .navbar-brand{
+    float: left;
+    min-height: 55px;
+    padding:0 15px 10px;
+}
+table#reservation {
+    border-collapse: collapse;   
+}
+#reservation tr {
+    background-color: #eee;
+    border-top: 1px solid #fff;
+}
+#reservation tr:hover {
+    background-color: #ccc;
+}
+#reservation th {
+    background-color: #fff;
+}
+#reservation th, #example td {
+    padding: 3px 5px;
+}
+#reservation td:hover {
+    cursor: pointer;
+}
+
+#mytable,td{
+    border:1px solid blue;
+}
+
+
+
+
+
+.selected {
+    background-color: brown;
+    color: #8DA77C;
+}
+
+
+
+
+
+
+
+
+
+</style>
+
+</head>
+
+<body  >
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-light navbar-static-top" style="background-color: #8DA77C" role="navigation" style="margin-bottom: 0">
+          
+            <div class="navbar-header">
+                
+               <!-- <a class="navbar-brand" href="index.html">CarRental</a>-->
+               <div class="toggle-nav">
+        <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+      </div>
+               <h3> <b>CAR RENTAL</b></h3>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                
+                <!-- /.dropdown -->
+                
+              
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                       
+                        <li class="divider"></li>
+                        <li><a href="index.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+           
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                       
+                       
+                        
+                        <li>
+                            <a href="rentcar.html"><i class="fa fa-sitemap fa-fw"></i> Rent Car</a>
+                            
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-sitemap fa-fw"></i>Contact</a>
+                            
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+                           
+                       
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+            <!-- /.navbar-static-side -->
+        </nav>
+    
+
+     <div id="page-wrapper">
+            <div class="row">
+                <div  class="col-lg-12">
+                    <h1 class="page-header">Edit Reservation</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+               <div class="row">
+                <div class="col-lg-12">
+                    <div  class="panel panel-default">
+                        <div style="background-color: #8DA77C" class="panel-heading">
+                            Reservation Details
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="details" class="col-lg-12 text-center" >
+                                    <!-- <div class="details">
+                                    </div> -->
+
+
+                                    <table width="100%"  id="reservation" class="table table-striped table-bordered table-hover" >
+
+                                    <tr>
+                                            <th>RentalStore</th>
+                                            <th>PickupDate</th>
+                                            <th>ReturnDate</th>
+                                            <th>CarModel</th>
+                                            <th>delete</th>
+                                        </tr>
+
+
+                                    </table>
+                                     <input type="button" style="background-color: #8DA77C"id="tst" value="Delete" onclick="fnselect()" />
+                                </div>
+                             
+                            </div>
+                            <div id="details" class="col-lg-12 text-center" >
+                            
+                             </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <!-- /#page-wrapper -->
+
+</div>
+    <!-- /#wrapper -->
+<script>
+
+
+window.onload = function() {
+    
+// var json =  {"reserv":[
+//                 {
+//                      "store": "store1",
+//                      "pickupdate": "12/23/2018",
+//                      "returndate": "12/24/2018",
+//                      "Carmodel": "Toyota-Corolla"
+//                  }
+//                  ]};
+
+
+// var details = document.getElementsByClassName("details")[0];
+// var reservation = json.reserv;
+
+    
+// for(var i = 0; i < reservation.length; i++) {
+//     var h5=  document.createElement("h5");
+//     h5.innerHTML = "store:"+reservation[i].store;
+//     details.appendChild(h5);
+//     var p = document.createElement("p");
+//     p.innerHTML = "pickupdate:"+reservation[i].pickupdate;
+//     details.appendChild(p);
+//     var p = document.createElement("p");
+//     p.innerHTML = "returndate:"+reservation[i].returndate;
+//     details.appendChild(p);
+//    var h5 = document.createElement("h5");
+//     h5.innerHTML = "Carmodel:"+reservation[i].Carmodel;
+//     details.appendChild(h5);
+
+
+// }
+    
+//rservation table creation
+    
+var reservation=[
+    {
+       store: "store1",
+        pickupdate: "12/23/2018",
+         returndate: "12/24/2018",
+      Carmodel: "Toyota-Corolla"
+        
+    },
+    {
+       store: "store1",
+        pickupdate: "12/23/2018",
+         returndate: "12/24/2018",
+      Carmodel: "HondaCivic"
+    },
+    {
+       store: "store1",
+        pickupdate: "12/23/2018",
+         returndate: "12/24/2018",
+      Carmodel: "Toyota-Corolla"
+    },
+     {
+       store: "store1",
+        pickupdate: "12/23/2018",
+         returndate: "12/24/2018",
+      Carmodel: "Toyota-Corolla"
+    },
+     {
+       store: "store1",
+        pickupdate: "12/23/2018",
+         returndate: "12/24/2018",
+      Carmodel: "Toyota-Corolla"
+    },
+     {
+       store: "store1",
+        pickupdate: "12/23/2018",
+         returndate: "12/24/2018",
+      Carmodel: "Toyota-Corolla"
+    }
+]
+
+  
+// var tr;
+//         for (var i = 0; i < reservation.length; i++) {
+//             tr = '<tr>';
+//             tr.append("<td>" + reservation[i].store + "</td>");
+//             tr.append("<td>" + reservation[i].pickupdate + "</td>");
+//             tr.append("<td>" + reservation[i].returndate  + "</td>");
+//             tr.append("<td>" + reservation[i].Carmodel  + "</td>");
+//             tr += '<td><button class="delete" data-key="'+ (key + 1) +'">Delete</button></td>';
+//             tr += '</tr>'
+//             $('#reservation').append(tr);
+//         }
+        
+$.each(reservation, function(key, val) {
+    var tr = '<tr>';
+  
+  
+    tr += '<td>' + val.store + '</td>';
+    tr += '<td>' + val.pickupdate + '</td>';
+    tr += '<td>' + val.returndate + '</td>';
+    tr += '<td>' + val.Carmodel + '</td>';
+    tr += '<td><button class="delete" data-key="'+ (key + 1) +'">Delete</button></td>';
+  
+    tr += '</tr>';
+  
+    $('#reservation').append(tr);
+  });
+
+
+$('button.delete').on('click', function() {
+    var cRow = $(this).parents('tr');
+    var store = $('td:nth-child(1)', cRow).text();
+    var pickupdate = $('td:nth-child(2)', cRow).text();
+     var returndate = $('td:nth-child(3)', cRow).text();
+      var Carmodel = $('td:nth-child(4)', cRow).text();
+    cRow.fadeOut('slow', function() {
+      doDelete(store, pickupdate,returndate,Carmodel);
+     });
+  });
+  
+  function doDelete(param1, param2, param3, param4 ) {
+    alert('Are you sure of cancelling \n\n[' + param4 + ']\nbooking on: [' + param2 + '].');
+  }
+
+// function highlight(e) {
+//     if (selected[0]) selected[0].className = '';
+//     e.target.parentNode.className = 'selected';
+// //                tr.append("<td> <input type="button" style="background-color: #8DA77C" id="tst" value="Delete" />  </td>");
+
+    
+// }
+
+// var table = document.getElementById('reservation'),
+//     selected = table.getElementsByClassName('selected');
+// table.onclick = highlight;
+
+// function fnselect(){
+// var $row=$(this).parent().find('td');
+//     var clickeedID=$row.eq(0).text();
+//    // alert(clickeedID);
+// }
+
+// $("#tst").click(function(){
+//     var value =$(".selected td:first").html();
+
+//     value = value || "No row Selected";
+//     alert(value);
+// });
+
+//  $('#reservation').DataTable({
+//             responsive: true
+//         });
+
+};
+
+
+
+
+
+</script>
+
+
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+    <script src="../dist/js/daterangepicker.js"></script>
+    <script src="../dist/js/bootstrap-datepicker.js"></script>
+</body>
+</html>
