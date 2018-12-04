@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+     
+     <link href="../dist/css/daterangepicker.css" rel="stylesheet" />
+    <link href="../dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+     <link href="http://fonts.googleapis.com/css?family=Corben:bold" rel="stylesheet" type="text/css">
+ <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
+
+    <style type="text/css">
+
+    .navbar-brand{
+    float: left;
+    min-height: 55px;
+    padding:0 15px 10px;
+}
+table#reservation {
+    border-collapse: collapse;   
+}
+#reservation tr {
+    background-color: #eee;
+    border-top: 1px solid #fff;
+}
+#reservation tr:hover {
+    background-color: #ccc;
+}
+#reservation th {
+    background-color: #fff;
+}
+#reservation th, #example td {
+    padding: 3px 5px;
+}
+#reservation td:hover {
+    cursor: pointer;
+}
+
+#mytable,td{
+    border:1px solid blue;
+}
+
+
+
+
+
+.selected {
+    background-color: brown;
+    color: #8DA77C;
+}
+
+
+
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+          //  let license_no = localStorage.getItem('license_no');
+     
+     let data={
+             "user":"admin"
+                 };
+         data = JSON.stringify(data);
+
+        let xhttp = new XMLHttpRequest();
+        let url = "http://localhost:9000/api/admin/getstore";
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                let response = xhttp.responseText;
+                 response = JSON.parse(response);
+                if(response.code == 200) {
+                 //   localStorage.setItem('rlid',response.data.rlid);
+                    
+    let sales=response.data;
+
+
+/*
+var sales=[
+    {
+       Store:"store1",
+      storesales: "30000",
+      Profit: "10000"
+        
+    },
+    {
+       Store:"store2",
+      storesales: "30000",
+      Profit: "10000"
+        
+    }
+    
+]
+*/
+
+        
+$.each(sales, function(key, val) {
+    var tr = '<tr>';
+  
+  
+  tr += '<td>' + val.street + '</td>';
+
+    tr += '<td>' + val.profits + '$'+'</td>';
+   
+  
+    tr += '</tr>';
+  
+    $('#storesales').append(tr);
+  });
+
+                    } else {
+                        alert(response.message);
+                    }
+            }
+        }
+        xhttp.send(data);
+           
+      });
+</script>    
+
+</head>
+
+<body  >
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-light navbar-static-top" style="background-color: #8DA77C" role="navigation" style="margin-bottom: 0">
+          
+            <div class="navbar-header">
+                
+               <!-- <a class="navbar-brand" href="index.html">CarRental</a>-->
+               <div class="toggle-nav">
+        <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+      </div>
+               <h3> <b>CAR RENTAL</b></h3>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                
+                <!-- /.dropdown -->
+                
+            <h6>Welcome Admin</h6>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                       
+                        <li class="divider"></li>
+                        <li><a href="index.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+                 <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                       
+                       
+                        
+                        <li>
+                            <a href="sadminuseredit.html"><i class="fa fa-sitemap fa-fw"></i> Edit User</a>
+                            
+                            <!-- /.nav-second-level -->
+                        </li>
+                        
+              
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+            <!-- /.navbar-static-side -->
+        </nav>
+    
+
+     <div id="page-wrapper">
+            <div class="row">
+                <div  class="col-lg-12">
+                    <h1 class="page-header">Store Sales </h1>
+                </div>
+                <!-- /.col-lg-12 -->
+               <div class="row">
+                <div class="col-lg-12">
+                    <div  class="panel panel-default">
+                        
+                        <div class="panel-body">
+                            <div class="row">
+                                <div id="details" class="col-lg-12 text-center" >
+                                    <!-- <div class="details">
+                                    </div> -->
+
+
+                                    <table width="100%"  id="storesales" class="table table-striped table-bordered table-hover" >
+
+                                    <tr>
+                                          <th style="background-color: #8DA77C" class="text-center"><h6>Store</h6></th>
+                                            <th  style="background-color: #8DA77C"class="text-center"><h6>Profit</h6></th>
+                                            
+                                        </tr>
+
+
+                                    </table>
+                                <!--      <input type="button" style="background-color: #8DA77C"id="tst" value="Delete" onclick="fnselect()" />
+                                </div>
+                             
+                            </div> -->
+                          
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <!-- /#page-wrapper -->
+
+</div>
+    <!-- /#wrapper -->
+<script>
+
+
+window.onload = function() {
+    
+
+    
+
+
+
+
+};
+
+
+
+
+
+</script>
+
+
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+    <script src="../dist/js/daterangepicker.js"></script>
+    <script src="../dist/js/bootstrap-datepicker.js"></script>
+</body>
+</html>

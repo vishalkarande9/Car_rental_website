@@ -24,7 +24,10 @@ router.post('/manager/addcar',manager.addCar)
 router.post('/manager/getrlid',manager.getrlid)
 router.post('/manager/deletecar',manager.deleteCar)
 router.get('/manager/getcar',manager.getCar)
-router.post('/manager/viewCar',manager.viewCar)
+router.post('/manager/viewcar',manager.viewCar)
+
+router.post('/admin/getcars',manager.admingetcar)
+router.post('/admin/getstore',manager.admingetstore)
 
 
 

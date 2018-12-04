@@ -198,7 +198,68 @@ function deleteCar(req, res) {
     });  
 }
 
+function admingetcar(req, res) { 
 
+    let sql = `Select C.model, sum(total_amount) As profits From payment P, reservation R , car C Where P.status=1 And R.resid=P.resId And R.vin=C.vin Group By C.model Order By profits Desc `;
+    let query = db.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        
+        } else{
+            if(result.length>0){
+                let obj={
+                    "code":200,
+                    "message":"got cars",
+                    "data":result
+                } 
+                res.json(obj);
+            } else{
+                let obj={
+                    "code":400,
+                    "message":"no cars found"
+                } 
+                res.json(obj);
+            }
+  
+    
+        }
+        
+    });  
+}
+
+function admingetstore(req, res) { 
+
+    let sql = `Select RS.street, sum(total_amount) As profits From payment P, reservation R , availability A, rental_store RS Where P.status=1 And R.resid=P.resId And R.vin=A.vin And A.rlid=RS.rlid Group By RS.street Order By profits Desc `;
+    let query = db.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        
+        } else{
+            console.log("result :",result);
+            if(result.length>0){
+                let obj={
+                    "code":200,
+                    "message":"got stores",
+                    "data":result
+                } 
+                res.json(obj);
+            } else{
+                let obj={
+                    "code":400,
+                    "message":"no stores found"
+                } 
+                res.json(obj);
+            }
+  
+    
+        }
+        
+    });  
+}
+
+
+module.exports.admingetcar = admingetcar
+module.exports.admingetstore = admingetstore
 module.exports.viewCar = viewCar
 module.exports.addCar = addCar 
 module.exports.getrlid = getrlid

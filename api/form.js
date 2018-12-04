@@ -296,6 +296,7 @@ function book(req, res) {
     let license_no =req.body.license_no;
     let pickupdate =req.body.pickupdate;
     let returndate =req.body.returndate;
+    let total_amount = req.body.total_amount;
     let resid = moment().unix();
     let sql1 = `Insert into reservation values (${resid},'${vin}',${license_no},'${pickupdate}','${returndate}',1)`;
     let query2 = db.query(sql1, (err, result) => {
@@ -307,12 +308,26 @@ function book(req, res) {
 
             res.json(obj);
         } else{
-            obj={
-                'code':200,
-                'message':"booking done"
-            }
+            let sql2 = `Insert into payment values (${resid},${total_amount},1)`;
+            let query2 = db.query(sql2, (err, result) => {
+                if(err){
+                    obj={
+                        'code':400,
+                        'message':"cannot insert values"
+                    }
+        
+                    res.json(obj);
+                } else{
+                    obj={
+                        'code':200,
+                        'message':"booking done"
+                    }
+        
+                    res.json(obj);
+                }
+            })
 
-            res.json(obj);
+     
         }
     })
 
