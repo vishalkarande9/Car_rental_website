@@ -60,6 +60,37 @@ function getCar(req, res) {
     });  
 }
 
+function viewCar(req, res) { 
+    let rlid  = req.body.rlid ;
+
+    let sql = `SELECT C.vin, C.model FROM Car C, availability A Where C.vin= A.vin And A.rlid =${rlid}`;
+    let query = db.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        } else{
+            if(result.length>0){
+                let obj={
+                    "code":200,
+                    "message":"got cars",
+                    "data":result
+        
+                } 
+                res.json(obj);
+            } else{
+                let obj={
+                    "code":400,
+                    "message":"no cars available"
+        
+                } 
+                res.json(obj);
+            }
+           
+
+        }
+        
+    });  
+}
+
 function getrlid(req, res) { 
     let emailId  = req.body.emailId ;
 
@@ -150,6 +181,11 @@ function deleteCar(req, res) {
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
+            let obj={
+                "code":400,
+                "message":"error in deleting car"
+            } 
+            res.json(obj);
         } else{
         let obj={
             "code":200,
@@ -163,7 +199,7 @@ function deleteCar(req, res) {
 }
 
 
-
+module.exports.viewCar = viewCar
 module.exports.addCar = addCar 
 module.exports.getrlid = getrlid
 module.exports.deleteCar = deleteCar 
