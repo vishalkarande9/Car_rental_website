@@ -15,7 +15,7 @@
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet"> 
 
     <!-- Custom CSS -->
     <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
@@ -29,9 +29,6 @@
     <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
      <link href="http://fonts.googleapis.com/css?family=Corben:bold" rel="stylesheet" type="text/css">
  <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <style type="text/css">
 
     .navbar-brand{
@@ -74,13 +71,104 @@ table#reservation {
 
 
 
-
-
-
-
-
-
 </style>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        let license_no = localStorage.getItem('license_no');
+     
+        let data={
+                "license_no":license_no
+                    };
+            data = JSON.stringify(data);
+        let xhttp = new XMLHttpRequest();
+        let url = "http://localhost:9000/api/viewreservation";
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                let response = xhttp.responseText;
+                 response = JSON.parse(response);
+                if(response.code == 200) {
+                 
+    
+
+    
+    //rservation table creation
+    let reservation= response.data;
+       
+    $.each(reservation, function(key, val) {
+        var tr = '<tr>';
+      
+        tr += '<td>' + val.resid + '</td>';
+        tr += '<td>' + val.street + '</td>';
+        tr += '<td>' + val.pickupdate + '</td>';
+        tr += '<td>' + val.returndate + '</td>';
+        tr += '<td>' + val.model + '</td>';
+        tr += '<td><button class="cancel" data-key="'+ (key + 1) +'">cancel</button></td>';
+      
+        tr += '</tr>';
+      
+        $('#reservation').append(tr);
+      });
+    
+    
+    $('button.cancel').on('click', function() {
+        var cRow = $(this).parents('tr');
+        var resid = $('td:nth-child(1)', cRow).text();
+        var store = $('td:nth-child(2)', cRow).text();
+        var pickupdate = $('td:nth-child(3)', cRow).text();
+         var returndate = $('td:nth-child(4)', cRow).text();
+          var Carmodel = $('td:nth-child(5)', cRow).text();
+        cRow.fadeOut('slow', function() {
+          doCancel(resid, store, pickupdate,returndate,Carmodel);
+         });
+      });
+      
+      function doCancel(param1, param2, param3, param4, param5 ) {
+        alert('Are you sure of cancelling \n\n[' + param4 + ']\nbooking on: [' + param2 + '].');
+
+         let data={
+                "resid":param1
+                    };
+            data = JSON.stringify(data);
+        let xhttp = new XMLHttpRequest();
+        let url = "http://localhost:9000/api/cancelreservation";
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                let response = xhttp.responseText;
+                 response = JSON.parse(response);
+                if(response.code == 200) {
+                    alert(response.message)
+                    window.location.href = "./editbooking.html"; 
+                } else{
+                    alert("cannot cancel reservation");
+                    window.location.href = "./editbooking.html"; 
+                }
+            }
+        }
+            xhttp.send(data);
+        
+
+      }
+    
+    
+    
+
+
+
+                    } else {
+                        alert(response.message);
+                    } 
+            }
+        }
+        xhttp.send(data);
+           
+      });
+</script>      
 
 </head>
 
@@ -175,16 +263,16 @@ table#reservation {
                                     <table width="100%"  id="reservation" class="table table-striped table-bordered table-hover" >
 
                                     <tr>
+                                            <th>ReservationId</th>
                                             <th>RentalStore</th>
                                             <th>PickupDate</th>
                                             <th>ReturnDate</th>
                                             <th>CarModel</th>
-                                            <th>delete</th>
+                                            <th>cancel</th>
                                         </tr>
 
 
                                     </table>
-                                     <input type="button" style="background-color: #8DA77C"id="tst" value="Delete" onclick="fnselect()" />
                                 </div>
                              
                             </div>
@@ -206,164 +294,7 @@ table#reservation {
 
 </div>
     <!-- /#wrapper -->
-<script>
 
-
-window.onload = function() {
-    
-// var json =  {"reserv":[
-//                 {
-//                      "store": "store1",
-//                      "pickupdate": "12/23/2018",
-//                      "returndate": "12/24/2018",
-//                      "Carmodel": "Toyota-Corolla"
-//                  }
-//                  ]};
-
-
-// var details = document.getElementsByClassName("details")[0];
-// var reservation = json.reserv;
-
-    
-// for(var i = 0; i < reservation.length; i++) {
-//     var h5=  document.createElement("h5");
-//     h5.innerHTML = "store:"+reservation[i].store;
-//     details.appendChild(h5);
-//     var p = document.createElement("p");
-//     p.innerHTML = "pickupdate:"+reservation[i].pickupdate;
-//     details.appendChild(p);
-//     var p = document.createElement("p");
-//     p.innerHTML = "returndate:"+reservation[i].returndate;
-//     details.appendChild(p);
-//    var h5 = document.createElement("h5");
-//     h5.innerHTML = "Carmodel:"+reservation[i].Carmodel;
-//     details.appendChild(h5);
-
-
-// }
-    
-//rservation table creation
-    
-var reservation=[
-    {
-       store: "store1",
-        pickupdate: "12/23/2018",
-         returndate: "12/24/2018",
-      Carmodel: "Toyota-Corolla"
-        
-    },
-    {
-       store: "store1",
-        pickupdate: "12/23/2018",
-         returndate: "12/24/2018",
-      Carmodel: "HondaCivic"
-    },
-    {
-       store: "store1",
-        pickupdate: "12/23/2018",
-         returndate: "12/24/2018",
-      Carmodel: "Toyota-Corolla"
-    },
-     {
-       store: "store1",
-        pickupdate: "12/23/2018",
-         returndate: "12/24/2018",
-      Carmodel: "Toyota-Corolla"
-    },
-     {
-       store: "store1",
-        pickupdate: "12/23/2018",
-         returndate: "12/24/2018",
-      Carmodel: "Toyota-Corolla"
-    },
-     {
-       store: "store1",
-        pickupdate: "12/23/2018",
-         returndate: "12/24/2018",
-      Carmodel: "Toyota-Corolla"
-    }
-]
-
-  
-// var tr;
-//         for (var i = 0; i < reservation.length; i++) {
-//             tr = '<tr>';
-//             tr.append("<td>" + reservation[i].store + "</td>");
-//             tr.append("<td>" + reservation[i].pickupdate + "</td>");
-//             tr.append("<td>" + reservation[i].returndate  + "</td>");
-//             tr.append("<td>" + reservation[i].Carmodel  + "</td>");
-//             tr += '<td><button class="delete" data-key="'+ (key + 1) +'">Delete</button></td>';
-//             tr += '</tr>'
-//             $('#reservation').append(tr);
-//         }
-        
-$.each(reservation, function(key, val) {
-    var tr = '<tr>';
-  
-  
-    tr += '<td>' + val.store + '</td>';
-    tr += '<td>' + val.pickupdate + '</td>';
-    tr += '<td>' + val.returndate + '</td>';
-    tr += '<td>' + val.Carmodel + '</td>';
-    tr += '<td><button class="delete" data-key="'+ (key + 1) +'">Delete</button></td>';
-  
-    tr += '</tr>';
-  
-    $('#reservation').append(tr);
-  });
-
-
-$('button.delete').on('click', function() {
-    var cRow = $(this).parents('tr');
-    var store = $('td:nth-child(1)', cRow).text();
-    var pickupdate = $('td:nth-child(2)', cRow).text();
-     var returndate = $('td:nth-child(3)', cRow).text();
-      var Carmodel = $('td:nth-child(4)', cRow).text();
-    cRow.fadeOut('slow', function() {
-      doDelete(store, pickupdate,returndate,Carmodel);
-     });
-  });
-  
-  function doDelete(param1, param2, param3, param4 ) {
-    alert('Are you sure of cancelling \n\n[' + param4 + ']\nbooking on: [' + param2 + '].');
-  }
-
-// function highlight(e) {
-//     if (selected[0]) selected[0].className = '';
-//     e.target.parentNode.className = 'selected';
-// //                tr.append("<td> <input type="button" style="background-color: #8DA77C" id="tst" value="Delete" />  </td>");
-
-    
-// }
-
-// var table = document.getElementById('reservation'),
-//     selected = table.getElementsByClassName('selected');
-// table.onclick = highlight;
-
-// function fnselect(){
-// var $row=$(this).parent().find('td');
-//     var clickeedID=$row.eq(0).text();
-//    // alert(clickeedID);
-// }
-
-// $("#tst").click(function(){
-//     var value =$(".selected td:first").html();
-
-//     value = value || "No row Selected";
-//     alert(value);
-// });
-
-//  $('#reservation').DataTable({
-//             responsive: true
-//         });
-
-};
-
-
-
-
-
-</script>
 
 
     <!-- /#wrapper -->
@@ -382,5 +313,13 @@ $('button.delete').on('click', function() {
 
     <script src="../dist/js/daterangepicker.js"></script>
     <script src="../dist/js/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function() {
+        window.history.pushState(null, "", window.location.href);        
+        window.onpopstate = function() {
+            window.history.pushState(null, "", window.location.href);
+        };
+    });
+    </script> 
 </body>
 </html>

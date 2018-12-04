@@ -4,7 +4,7 @@ const async = require('async');
 var moment = require('moment');
 const uuid = require('uuid/v1');
 
-
+ 
 // Create connection
 const db = mysql.createConnection({
     host     : 'localhost',
@@ -20,6 +20,62 @@ db.connect((err) => {
     }
     console.log('MySql Connected...');
 });
+
+function viewreservation(req,res) {
+    let license_no = req.body.license_no;
+    let sql = `SELECT R.resid, RS.street, R.pickupdate, R.returndate, C.model From reservation R, Availability A, Car C, rental_store RS Where R.license_no = ${license_no} And R.vin = A.vin And R.vin = C.vin And RS.rlid = A.rlid And R.status=1`;
+    let query = db.query(sql, (err, result) => { 
+        if(err){
+            console.log(err);
+    
+        } else{
+            if(result.length>0){
+                obj={
+                    'code':200,
+                    'message':"View Reservations",
+                    'data':result
+                }
+    
+                res.json(obj);
+            } else{
+                obj={
+                    'code':400,
+                    'message':"No Reservations Found"
+                }
+    
+                res.json(obj);
+            }
+      
+        }
+    })
+}
+
+function cancelreservation(req,res) {
+    let resid = req.body.resid;
+    let sql = `Update reservation Set status = 0 Where resid=${resid}`;
+    let query = db.query(sql, (err, result) => { 
+        if(err){
+            console.log(err);
+    
+        } else{
+            let sql1 = `Update payment Set status = 0 Where resid=${resid}`;
+            let query = db.query(sql1, (err, result) => { 
+                if(err){
+                    console.log(err);
+            
+                } else{
+                    obj={
+                        'code':200,
+                        'message':"Reservation canceled"
+                    }
+        
+                    res.json(obj);
+                }
+            })
+      
+        }
+    })
+}
 
 
 
@@ -262,7 +318,8 @@ function book(req, res) {
 
 }
 
-
+module.exports.cancelreservation = cancelreservation
+module.exports.viewreservation = viewreservation
 module.exports.book = book 
 module.exports.search = search 
 module.exports.get = get 
