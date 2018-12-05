@@ -82,7 +82,7 @@ function cancelreservation(req,res) {
 
 function get(req, res) { 
     let emailId = req.body.emailId;
-    console.log(emailId);
+  //  console.log(emailId);
     let sql = `SELECT R.rlid,R.street,SC.city,SC.state FROM rental_store R INNER JOIN state_city SC ON R.zip = SC.zip`;
     let query = db.query(sql, (err, result) => {
         if(err){
@@ -172,14 +172,14 @@ function check(req, res) {
         if(err){
             console.log(err);
         } else{
-           //console.log(result);
-            
-            if(_.some(result, { 'license_no':license_no})){
-              let array = _.filter(result, { 'license_no':license_no});
+           license_no = parseInt(license_no);
+           
+            if(_.some(result, {'license_no':license_no})){
+              let array = _.filter(result, {'license_no':license_no});
               let flag=true;
               for(let i=0;i<array.length;i++){
-                  let pickup_date=moment(array[i]["pickup_date"], "M/D/YYYY").valueOf();
-                  let return_date=moment(array[i]["return_date"], "M/D/YYYY").valueOf();
+                  let pickup_date=moment(array[i]["pickupdate"], "M/D/YYYY").valueOf();
+                  let return_date=moment(array[i]["returndate"], "M/D/YYYY").valueOf();
                   if((pickup_date<=StartDate && return_date>=StartDate) || (pickup_date<=ReturnDate && return_date>=ReturnDate) || (pickup_date>=StartDate && return_date<=ReturnDate)){
                       flag = false;
                   } 
@@ -228,8 +228,8 @@ function search(req, res){
             let flag=true;
             let vinIdArray=[];
             for(let i=0;i<result.length;i++){
-                let pickup_date=moment(result[i]["pickup_date"], "M/D/YYYY").valueOf();
-                let return_date=moment(result[i]["return_date"], "M/D/YYYY").valueOf();
+                let pickup_date=moment(result[i]["pickupdate"], "M/D/YYYY").valueOf();
+                let return_date=moment(result[i]["returndate"], "M/D/YYYY").valueOf();
                 if((pickup_date<=StartDate && return_date>=StartDate) || (pickup_date<=ReturnDate && return_date>=ReturnDate) || (pickup_date>=StartDate && return_date<=ReturnDate)){
                     vinIdArray.push(result[i].vin);
                 } else{
