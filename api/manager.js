@@ -257,7 +257,58 @@ function admingetstore(req, res) {
     });  
 }
 
+function getuser(req, res) { 
 
+    let sql = `Select emailId , user_key from user `;
+    let query = db.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        
+        } else{
+            console.log("result :",result);
+            if(result.length>0){
+                let obj={
+                    "code":200,
+                    "message":"got users",
+                    "data":result
+                } 
+                res.json(obj);
+            } else{
+                let obj={
+                    "code":400,
+                    "message":"no users found"
+                } 
+                res.json(obj);
+            }
+  
+    
+        }
+        
+    });  
+}
+
+function deleteuser(req, res) { 
+    let emailId  = req.body.emailId ;
+
+    let sql = `Delete From user where emailId='${emailId}'`;
+    let query = db.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        
+        } else{
+                let obj={
+                    "code":200,
+                    "message":"user deleted"
+                                } 
+                res.json(obj);
+  
+    
+        }
+        
+    });  
+}
+
+module.exports.deleteuser = deleteuser
 module.exports.admingetcar = admingetcar
 module.exports.admingetstore = admingetstore
 module.exports.viewCar = viewCar
@@ -265,3 +316,4 @@ module.exports.addCar = addCar
 module.exports.getrlid = getrlid
 module.exports.deleteCar = deleteCar 
 module.exports.getCar = getCar 
+module.exports.getuser = getuser

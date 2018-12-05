@@ -28,6 +28,9 @@ router.post('/manager/viewcar',manager.viewCar)
 
 router.post('/admin/getcars',manager.admingetcar)
 router.post('/admin/getstore',manager.admingetstore)
+router.post('/admin/getuser',manager.getuser)
+router.post('/admin/deleteuser',manager.deleteuser)
+
 
 
 
