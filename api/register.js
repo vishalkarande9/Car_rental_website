@@ -77,14 +77,14 @@ function registerManager(req, res) {
     let password = req.body.password ;
     let rlid = req.body.rlid ;
     let name = req.body.name ;
-
    // let password = req.body.password;
 
-    let sql = `SELECT emailId FROM user Where emailId =${emailId}`;
+    let sql = `SELECT emailId FROM user Where emailId ='${emailId}'`;
     let query = db.query(sql, (err, result) => {
         if(err){
             console.log(err);
         } else{
+            console.log(result)
             if(result.length>0){
               let obj={
                   "code":400,
@@ -97,11 +97,17 @@ function registerManager(req, res) {
               let query = db.query(sql1, (err, result) => {
                   if(err){
                     console.log(err);
+                
                   } else{
                     let sql2 = `Insert into manager values ('${emailId}',${rlid},'${name}')`; 
                     let query = db.query(sql2, (err, result) => { 
                         if(err){
                             console.log(err);
+                            let obj={
+                                "code":400,
+                                "message":"Manager already existshhhhhhhh"
+                            } 
+                            res.json(obj);
                         } else{
                             let obj={
                                 "code":200,

@@ -29,19 +29,57 @@
  <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
 
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+<!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
-   
+ -->  
+<script> 
 
+      
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+        function registerOnClick() {
+             let license_no = document.getElementById("license").value;
+             let name = document.getElementById("Name").value;
+             let emailId = document.getElementById("inputEmail").value;
+             let zip = document.getElementById("zipcode").value;
+             let password = document.getElementById("inputPassword").value;
+             let street = document.getElementById("street").value;
+ 
+             if(zip == "Choose" || name == "" || emailId == "" || password == "" || license_no == "" || street == ""){
+                 alert("Pleasse Select all values");
+             } else{
+                 let data={
+                 "name":name,
+                 "emailId":emailId,
+                 "zip": zip,
+                 "password":password,
+                 "license_no":license_no,
+                 "street":street
+                     };
+             data = JSON.stringify(data);
+         let xhttp = new XMLHttpRequest();
+         let url = "http://localhost:9000/api/register/customer";
+         xhttp.open("POST", url, true);
+         xhttp.setRequestHeader("Content-type", "application/json");
+         xhttp.onreadystatechange = function() {
+             if(this.readyState == 4 && this.status == 200) {
+                 let response = xhttp.responseText;
+                  response = JSON.parse(response);
+                 if(response.code == 200) {
+                     alert(response.message);
+                     window.location.href = "./index.html"; 
+                     } else {
+                         alert(response.message);
+                     }
+             }
+         }
+         xhttp.send(data);
+ 
+             }
+ 
+        }
+ 
+ </script>
 </head>
 
 <body>
@@ -92,44 +130,26 @@
                   </div>
                 </div>
               
-                <div class="form-group">
-                  <div class="form-label-group">
-                     <label for="Age">Age</label>
-                    <input type="number" id="age" name="age" class="form-control" placeholder="Age" min=25 required="required" autofocus="autofocus" required>
-                    
-                  </div>
+       
                  <div class="form-group">
                     <div class="form-label-group">
                     <label for="inputAddress2">Street</label>
                     <input type="text" class="form-control" id="street" name="street" placeholder="Apartment, studio, or floor"  data-error="Please enter  your street name"  required>
                   </div>
               </div>
-                   <div class="form-group ">
-                    <div class="form-label-group">
-                      <label for="inputCity">City</label>
-                      <select id="inputCity" class="form-control" required>
-                        <option selected>Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                </div>
-                  
-                    
+           
                     <div class="form-group ">
-                        <div class="form-label-group">
-                      <label for="inputState">State</label>
-                      <select id="inputState" class="form-control" required>
-                        <option selected>Choose...</option>
-                        <option>...</option>
-                      </select>
-                    </div>
-                </div>
-                    <div class="form-group ">
-                        <div class="form-label-group">
-                      <label for="inputZip">Zip</label>
-                      <input type="text" id="zipcode" name="zipcode" class="form-control" minlength="5"  required>
-                    </div>
-                </div>
+                                      <label for="select1">Zipcode</label>
+                                      <select id="zipcode" class="form-control" name="zipcode" required>
+                                        <option selected>Choose</option>
+                                        <option value=15213>15213</option>
+                                        <option value=15217>15217</option>
+                                        <option value=15232>15232</option>
+                                        <option value=44102>44102</option>
+                                        <option value=75013>75013</option>
+
+                                      </select>
+                                    </div>
                  
                <div class="form-group ">
                         <div class="form-label-group">
@@ -171,7 +191,7 @@
                                 
                                 <!-- Change this to a button or input when using this as a form -->
                                 <div class="text-center">
-                                 <button style="background-color: #8DA77C"  id="test"class="btn btn-primary text-center" type="submit">Register</button>
+                                        <a href="#" style="background-color: #8DA77C" class="btn btn-lg btn-success btn-block" onclick="registerOnClick()">Register</a>                             </div>
                                  <div class="text-center">
                             </fieldset>
                         </form>
@@ -188,8 +208,9 @@
 
 <script type="text/javascript">
 
- var password = document.getElementById("inputPassword")
-  , confirm_password = document.getElementById("confirmPassword");
+ let password = document.getElementById("inputPassword");
+  let confirm_password = document.getElementById("confirmPassword");
+  let license_no = document.getElementById("license");
 
 function validatePassword(){
    
@@ -228,11 +249,31 @@ function validateZip() {
     }
 zip.onchange=validateZip;
 
+function validateLicense() {
+
+    
+for (var i=0; i < license_no.value.length; i++) {
+    if(numbers.indexOf(license_no.value[i]) > -1 ) {
+        license_no.setCustomValidity('');
+        newText = newText + license_no.value[i];
+    }
+    else {
+        license_no.setCustomValidity('invalid license_no');
+    }
+}
+}
+license_no.onchange=validateLicense;
+
 
 </script>
 
-        
-    <!-- /#wrapper -->
+<script>
+        window.onload = function() {
+            $('form').submit(false);
+
+        }
+ </script> 
+
 
     <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>

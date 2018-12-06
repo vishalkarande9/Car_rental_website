@@ -29,18 +29,55 @@
  <link href="http://fonts.googleapis.com/css?family=Nobile" rel="stylesheet" type="text/css">
 
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
+<!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css"/>
 
 <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.bootstrapvalidator/0.5.0/js/bootstrapValidator.min.js"></script>
+-->
    
+<script> 
 
+      
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+       function registerOnClick() {
+
+            let name = document.getElementById("Name").value;
+            let emailId = document.getElementById("inputEmail").value;
+            let rlid = document.getElementById("store").value;
+            let password = document.getElementById("inputPassword").value;
+
+            if(rlid == "Choose" || name == "" || emailId == "" || password == ""){
+                alert("Pleasse Select all values");
+            } else{
+                let data={
+                "name":name,
+                "emailId":emailId,
+                "rlid": rlid,
+                "password":password
+                    };
+            data = JSON.stringify(data);
+        let xhttp = new XMLHttpRequest();
+        let url = "http://localhost:9000/api/register/manager";
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                let response = xhttp.responseText;
+                 response = JSON.parse(response);
+                if(response.code == 200) {
+                    alert(response.message);
+                    window.location.href = "./index.html"; 
+                    } else {
+                        alert(response.message);
+                    }
+            }
+        }
+        xhttp.send(data);
+
+            }
+
+       }
+
+</script>
 
 </head>
 
@@ -63,12 +100,7 @@
                 <h4><b>CAR RENTAL</b></h4>
             </div>
             </div>
-            <!-- /.navbar-header -->
-
-            <!-- /.navbar-top-links -->
-
-    
-            <!-- /.navbar-static-side -->
+   
         </nav>
 
 
@@ -104,6 +136,18 @@
                     </div>
                 </div>
 
+
+                <div class="form-group ">
+                                      <label for="select1">Rental Store</label>
+                                      <select id="store" class="form-control" name="store" required>
+                                        <option selected>Choose</option>
+                                        <option value=1>5th avenue</option>
+                                        <option value=2>Ellsworth avenue </option>
+                                        <option value=3>Cedar Avenue</option>
+                                        <option value=4>Stonemont CT</option>
+                                        <option value=5>Squirrell Hill</option>
+                                      </select>
+                                    </div>
               
               <div class="form-group">
                 <div class="form-label-group">
@@ -127,8 +171,7 @@
                                 
                                 <!-- Change this to a button or input when using this as a form -->
                                 <div class="text-center">
-                                 <button style="background-color: #8DA77C"  id="test"class="btn btn-primary text-center" type="submit">Register</button>
-                             </div>
+                                        <a href="#" style="background-color: #8DA77C" class="btn btn-lg btn-success btn-block" onclick="registerOnClick()">Register</a>                             </div>
                             </fieldset>
                         </form>
                            <div class="text-center">
@@ -161,8 +204,15 @@ confirm_password.onkeyup = validatePassword;
 
 
 
+
 </script>
 
+<script>
+        window.onload = function() {
+            $('form').submit(false);
+
+        }
+ </script>              
         
     <!-- /#wrapper -->
 
